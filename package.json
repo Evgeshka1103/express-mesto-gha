@@ -2,18 +2,29 @@
   "name": "express-mesto-gha",
   "version": "1.0.0",
   "description": "[![Tests](../../actions/workflows/tests-13-sprint.yml/badge.svg)](../../actions/workflows/tests-13-sprint.yml) [![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)\r # Проект Mesto фронтенд + бэкенд",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "lint": "npx eslint ."
   },
   "repository": {
     "type": "git",
     "url": "git+https://Evgeshka1103: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@github.com/Evgeshka1103/express-mesto-gha.git"
   },
-  "author": "",
+  "author": "Евгения Соловьева",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Evgeshka1103/express-mesto-gha/issues"
   },
-  "homepage": "https://github.com/Evgeshka1103/express-mesto-gha#readme"
+  "homepage": "https://github.com/Evgeshka1103/express-mesto-gha#readme",
+  "dependencies": {
+    "eslint": "^8.31.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "express": "^4.18.2",
+    "mongoose": "^6.8.2",
+    "nodemon": "^2.0.20"
+  }
 }
