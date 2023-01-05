@@ -1,13 +1,13 @@
-const SERVER_OK = 200; // Запрос пользователя успешно выполнен
+const OK = 200; // Запрос пользователя успешно выполнен
 
-const SERVER_ERROR = 500; // Ошибка на стороне сервера
+const BadRequest = 400; // Некорректный запрос
 
-const ERROR_CODE = 400; // Запрашиваемый пользователь не найден
+const NotFound = 404; // Не найдено
 
-const NOT_FOUND = 404; // Пользователь с данными не найден
+const InternalServerError = 500; // Внутренняя ошибка сервера
 
 module.exports = {
-  SERVER_OK,
-  SERVER_ERROR,
-  ERROR_CODE,
-  NOT_FOUND };
+  OK,
+  BadRequest,
+  NotFound, 
+  InternalServerError };
