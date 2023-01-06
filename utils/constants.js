@@ -9,5 +9,6 @@ const InternalServerError = 500; // Внутренняя ошибка серве
 module.exports = {
   OK,
   BadRequest,
-  NotFound, 
-  InternalServerError };
+  NotFound,
+  InternalServerError,
+};
