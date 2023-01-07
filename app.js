@@ -6,7 +6,7 @@ const routes = require('./routes');
 
 const app = express();
 
-const { PORT = 3001 } = process.env;
+const { PORT = 3000 } = process.env;
 
 mongoose.set('strictQuery', true);
 
