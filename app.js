@@ -10,7 +10,15 @@ const { PORT = 3000 } = process.env;
 
 mongoose.set('strictQuery', true);
 
-mongoose.connect('mongodb://localhost:27017/mestodb');
+mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
+
+app.use((req, res, next) => {
+  req.user = {
+    _id: '63b95efec71e9fd3602f5d97',
+  };
+
+  next();
+});
 
 app.use(express.json());
 
