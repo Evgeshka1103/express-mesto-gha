@@ -42,9 +42,18 @@ const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
   User.create({ name, about, avatar })
-    .then((user) => res.status(OK).send(user))
+
+    .then((user) => {
+      if (!user) {
+        res.status(NotFound).send({ message: 'Не найдено' });
+      } else {
+        res.status(OK).send(user);
+      }
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
+        res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
+      } else if (err.name === 'CastError') {
         res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
       } else {
         res

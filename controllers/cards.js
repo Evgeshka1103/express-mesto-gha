@@ -82,7 +82,7 @@ const dislikeCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
+        res.statu(BadRequest).send({ message: 'Некорректный запрос', ...err });
       } else if (err.name === 'CastError') {
         res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
       } else {
