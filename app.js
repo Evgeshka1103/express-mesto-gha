@@ -25,5 +25,5 @@ app.use(express.json());
 app.use(routes);
 
 app.listen(PORT, () => {
-  console.log(`App listen port ${PORT}`);
+  console.log(`App listen ${PORT}`);
 });
