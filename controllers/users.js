@@ -77,6 +77,8 @@ const updateProfile = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(BadRequest).send({ message: 'Некорректный запрос' });
+      } else if (err.name === 'CastError') {
+        res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
       } else {
         res
           .status(InternalServerError)
@@ -104,6 +106,8 @@ const updateAvatar = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
+        res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
+      } else if (err.name === 'CastError') {
         res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
       } else {
         res
