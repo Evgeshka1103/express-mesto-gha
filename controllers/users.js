@@ -72,7 +72,7 @@ const updateAvatar = (req, res) => {
   })
     .then((user) => {
       if (!user) {
-        res.status(NotFound).send({ message: 'Не найдено' });
+        res.status(BadRequest).send({ message: 'Некорректный запрос' });
       } else { res.status(OK).send(user); }
     })
     .catch((err) => {
