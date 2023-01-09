@@ -11,7 +11,7 @@ routes.use('/users', usersRoutes);
 
 routes.use('/cards', cardsRoutes);
 
-routes.get('/', (req, res) => {
+routes.use('/', (req, res) => {
   res.status(NotFound).send(({ message: 'Не найдено' }));
 });
 
