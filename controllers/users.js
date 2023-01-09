@@ -59,7 +59,7 @@ const updateProfile = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
+        res.status(BadRequest).send({ message: 'Некорректный запрос' });
       } else { res.status(InternalServerError).send({ message: 'Внутренняя ошибка сервера' }); }
     });
 };
@@ -72,7 +72,7 @@ const updateAvatar = (req, res) => {
   })
     .then((user) => {
       if (!user) {
-        res.status(BadRequest).send({ message: 'Некорректный запрос' });
+        res.status(NotFound).send({ message: 'Не найдено' });
       } else { res.status(OK).send(user); }
     })
     .catch((err) => {
