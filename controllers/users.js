@@ -41,20 +41,12 @@ const createUser = (req, res) => {
 
   User.create({ name, about, avatar })
 
-    .then((user) => {
-      if (!user) {
-        res.status(NotFound).send({ message: 'Не найдено' });
-      } else {
-        res.status(OK).send(user);
-      }
-    })
+    .then((card) => res.status(OK).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
       } else {
-        res
-          .status(InternalServerError)
-          .send({ message: 'Внутренняя ошибка сервера' });
+        res.status(InternalServerError).send({ message: 'Внутренняя ошибка сервера' });
       }
     });
 };
