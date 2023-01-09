@@ -64,13 +64,6 @@ const updateProfile = (req, res) => {
       runValidators: true,
     },
   )
-    /*.then((user) => {
-      if (!user) {
-        res.status(NotFound).send({ message: 'Не найдено' });
-      } else {
-        res.status(OK).send(user);
-      }
-    })*/
     .then((user) => res.status(OK).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
