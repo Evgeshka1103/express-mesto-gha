@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const routes = require('./routes');
+const { NotFound } = require('./utils/constants');
 
 const app = express();
 
@@ -16,13 +17,16 @@ app.use((req, res, next) => {
   req.user = {
     _id: '63bc3cf5b503f3f4cdb52432',
   };
-
   next();
 });
 
 app.use(express.json());
 
 app.use(routes);
+
+app.get('/', (req, res) => {
+  res.status(NotFound).send(({ message: 'Не найдено' }));
+});
 
 app.listen(PORT, () => {
   console.log(`App listen ${PORT}`);
