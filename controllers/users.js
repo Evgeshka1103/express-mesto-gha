@@ -15,15 +15,16 @@ const getUsers = (req, res) => {
       .send({ message: 'Внутренняя ошибка сервера' }));
 };
 
-const getUserById = (req, res) => {
+const getUserById = (req, res, next) => {
   User.findById(req.params.userId)
 
     .then((user) => {
       if (!user) {
-        res.status(NotFound).send({ message: 'Не найдено' });
+        res.status(NotFound).json({ message: 'Не найдено' });
       } else {
         res.status(OK).send(user);
       }
+      next();
     })
     .catch((err) => {
       if (err.name === 'CastError') {
