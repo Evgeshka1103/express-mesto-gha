@@ -3,7 +3,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const routes = require('./routes');
-const { NotFound } = require('./utils/constants');
 
 const app = express();
 
