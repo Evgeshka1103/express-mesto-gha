@@ -1,6 +1,7 @@
 const Card = require('../models/card');
 const {
   OK,
+  CreatedCode,
   BadRequest,
   NotFound,
   InternalServerError,
@@ -15,7 +16,7 @@ const getCards = (req, res) => {
 const createCard = (req, res) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
-    .then((card) => res.status(OK).send(card))
+    .then((card) => res.status(CreatedCode).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
@@ -57,9 +58,7 @@ const likeCard = (req, res) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.statu(BadRequest).send({ message: 'Некорректный запрос', ...err });
-      } else if (err.name === 'CastError') {
+      if (err.name === 'CastError') {
         res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
       } else {
         res.status(InternalServerError).send({ message: 'Внутренняя ошибка сервера' });
@@ -81,9 +80,7 @@ const dislikeCard = (req, res) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.statu(BadRequest).send({ message: 'Некорректный запрос', ...err });
-      } else if (err.name === 'CastError') {
+      if (err.name === 'CastError') {
         res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
       } else {
         res.status(InternalServerError).send({ message: 'Внутренняя ошибка сервера' });

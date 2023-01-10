@@ -2,6 +2,7 @@ const User = require('../models/user');
 
 const {
   OK,
+  CreatedCode,
   BadRequest,
   NotFound,
   InternalServerError,
@@ -15,7 +16,7 @@ const getUsers = (req, res) => {
       .send({ message: 'Внутренняя ошибка сервера' }));
 };
 
-const getUserById = (req, res, next) => {
+const getUserById = (req, res) => {
   User.findById(req.params.userId)
 
     .then((user) => {
@@ -24,7 +25,6 @@ const getUserById = (req, res, next) => {
       } else {
         res.status(OK).send(user);
       }
-      next();
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -42,7 +42,7 @@ const createUser = (req, res) => {
 
   User.create({ name, about, avatar })
 
-    .then((card) => res.status(OK).send(card))
+    .then((card) => res.status(CreatedCode).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
