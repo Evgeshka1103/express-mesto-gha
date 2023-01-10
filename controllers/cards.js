@@ -9,7 +9,7 @@ const {
 
 const getCards = (req, res) => {
   Card.find({})
-    .then((card) => res.status(OK).send(card))
+    .then((cards) => res.status(OK).send(cards))
     .catch(() => res.status(InternalServerError).send({ message: 'Внутренняя ошибка сервера' }));
 };
 
