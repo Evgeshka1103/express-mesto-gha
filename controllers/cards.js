@@ -9,6 +9,7 @@ const {
 
 const getCards = (req, res) => {
   Card.find({})
+    .populate(['owner', 'likes'])
     .then((cards) => res.status(OK).send(cards))
     .catch(() => res.status(InternalServerError).send({ message: 'Внутренняя ошибка сервера' }));
 };
