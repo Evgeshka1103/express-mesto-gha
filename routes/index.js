@@ -1,5 +1,14 @@
 const express = require('express');
-const { NotFound } = require('../utils/constants');
+
+const { celebrate, Joi } = require('celebrate');
+
+const validateURL = require('../middlewares/validation');
+
+const { createUser, login } = require('../controllers/users');
+
+const auth = require('../middlewares/auth');
+
+const NotFoundError = require('../errors/NotFoundError');
 
 const usersRoutes = require('./users');
 
@@ -7,12 +16,29 @@ const cardsRoutes = require('./cards');
 
 const routes = express.Router();
 
+routes.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+    avatar: Joi.string().custom(validateURL),
+  }),
+}), createUser);
+
+routes.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+  }),
+}), login);
+
 routes.use('/users', usersRoutes);
 
 routes.use('/cards', cardsRoutes);
 
-routes.use('/', (req, res) => {
-  res.status(NotFound).send(({ message: 'Не найдено' }));
+routes.use(auth, () => {
+  throw new NotFoundError();
 });
 
 module.exports = routes;
