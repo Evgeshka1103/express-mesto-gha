@@ -1,91 +1,89 @@
+const BadRequestError = require('../errors/BadRequestError');
+const NotFoundError = require('../errors/NotFoundError');
+const ForbiddenError = require('../errors/ForbiddenError');
 const Card = require('../models/card');
-const {
-  OK,
-  CreatedCode,
-  BadRequest,
-  NotFound,
-  InternalServerError,
-} = require('../utils/constants');
 
-const getCards = (req, res) => {
+const getCards = (req, res, next) => {
   Card.find({})
     .populate(['owner', 'likes'])
-    .then((cards) => res.status(OK).send(cards))
-    .catch(() => res.status(InternalServerError).send({ message: 'Внутренняя ошибка сервера' }));
+    .then((cards) => {
+      res.send(cards);
+    })
+    .catch(next);
 };
 
-const createCard = (req, res) => {
+const createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
-    .then((card) => res.status(CreatedCode).send(card))
+    .then((card) => {
+      res.send(card);
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
-      } else {
-        res.status(InternalServerError).send({ message: 'Внутренняя ошибка сервера' });
+        return next(
+          new BadRequestError({ message: 'Некорректный запрос', ...err }),
+        );
       }
+      return next(err);
     });
 };
 
-const deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId)
+const deleteCard = (req, res, next) => {
+  Card.findById(req.params.cardId)
+    .orFail(new NotFoundError({ message: 'Не найдено' }))
     .then((card) => {
       if (!card) {
-        res.status(NotFound).send({ message: 'Не найдено' });
-      } else {
-        res.status(OK).send(card);
+        return next(new ForbiddenError({ message: 'Отказ сервера' }));
       }
+      return Card.findByIdAndRemove(req.params.cardId).then(() => res.send({ message: 'Карточка успешно удалена' }));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
-      } else {
-        res.status(InternalServerError).send({ message: 'Внутренняя ошибка сервера' });
+        return next(
+          new BadRequestError({ message: 'Некорректный запрос', ...err }),
+        );
       }
+      return next(err);
     });
 };
 
-const likeCard = (req, res) => {
+const likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
+    .orFail(new NotFoundError({ message: 'Не найдено' }))
     .then((card) => {
-      if (!card) {
-        res.status(NotFound).send({ message: 'Не найдено' });
-      } else {
-        res.status(OK).send(card);
-      }
+      res.send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
-      } else {
-        res.status(InternalServerError).send({ message: 'Внутренняя ошибка сервера' });
+        return next(
+          new BadRequestError({ message: 'Некорректный запрос', ...err }),
+        );
       }
+      return next(err);
     });
 };
 
-const dislikeCard = (req, res) => {
+const dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
     { new: true },
   )
+    .orFail(new NotFoundError({ message: 'Не найдено' }))
     .then((card) => {
-      if (!card) {
-        res.status(NotFound).send({ message: 'Не найдено' });
-      } else {
-        res.status(OK).send(card);
-      }
+      res.send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(BadRequest).send({ message: 'Некорректный запрос', ...err });
-      } else {
-        res.status(InternalServerError).send({ message: 'Внутренняя ошибка сервера' });
+        return next(
+          new BadRequestError({ message: 'Некорректный запрос', ...err }),
+        );
       }
+      return next(err);
     });
 };
 

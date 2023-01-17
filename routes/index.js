@@ -4,9 +4,9 @@ const { celebrate, Joi } = require('celebrate');
 
 const validateURL = require('../middlewares/validation');
 
-const { createUser, login } = require('../controllers/users');
-
 const auth = require('../middlewares/auth');
+
+const { createUser, login } = require('../controllers/users');
 
 const NotFoundError = require('../errors/NotFoundError');
 
