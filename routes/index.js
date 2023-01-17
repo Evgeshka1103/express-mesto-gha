@@ -33,12 +33,12 @@ routes.post('/signin', celebrate({
   }),
 }), login);
 
-routes.use('/users', usersRoutes);
+routes.use('/users', auth, usersRoutes);
 
-routes.use('/cards', cardsRoutes);
+routes.use('/cards', auth, cardsRoutes);
 
 routes.use(auth, () => {
-  throw new NotFoundError();
+  throw new NotFoundError({ message: 'Не найдено' });
 });
 
 module.exports = routes;
