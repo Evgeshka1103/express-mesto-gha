@@ -14,6 +14,8 @@ const rateLimit = require('express-rate-limit');
 
 const { errors } = require('celebrate');
 
+const { InternalServerError } = require('./utils/constants');
+
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const auth = require('./middlewares/auth');
@@ -37,7 +39,17 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
-routes.use(auth);
+app.use(auth);
+
+app.use((err, req, res, next) => {
+  const { statusCode = InternalServerError, message } = err;
+  res.status(statusCode).send({
+    message: statusCode === InternalServerError
+      ? 'Внутренняя ошибка сервера'
+      : message,
+  });
+  next();
+});
 
 app.use(errors());
 
