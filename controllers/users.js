@@ -64,11 +64,9 @@ const createUser = (req, res, next) => {
       name, about, avatar, email, password: hash,
     }))
     .then((user) => {
-      res
-        .status(CreatedCode)
-        .send({
-          _id: user._id, name, about, avatar, email,
-        });
+      const newUser = user.toObject();
+      delete newUser.password;
+      res.send(newUser);
     })
     .catch((err) => {
       if (err.code === 11000) {
