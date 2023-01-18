@@ -38,7 +38,7 @@ routes.use('/users', auth, usersRoutes);
 routes.use('/cards', auth, cardsRoutes);
 
 routes.use(auth, () => {
-  throw new NotFoundError({ message: 'Не найдено' });
+  throw new NotFoundError();
 });
 
 module.exports = routes;
