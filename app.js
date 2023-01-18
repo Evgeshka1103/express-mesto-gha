@@ -53,9 +53,9 @@ app.use((err, req, res, next) => {
 
 app.use(errors());
 
-routes.use(requestLogger);
+app.use(requestLogger);
 
-routes.use(errorLogger);
+app.use(errorLogger);
 
 app.use(helmet());
 
