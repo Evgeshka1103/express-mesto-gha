@@ -10,7 +10,9 @@ const getCards = (req, res, next) => {
     .then((cards) => {
       res.status(OK).send(cards);
     })
-    .catch(next);
+    .catch((err) => {
+      next(err);
+    });
 };
 
 const createCard = (req, res, next) => {
@@ -22,7 +24,7 @@ const createCard = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(
-          new BadRequestError({ message: 'Некорректный запрос' }),
+          new NotFoundError({ message: 'Некорректный запрос' }),
         );
       }
       return next(err);
@@ -33,7 +35,7 @@ const deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
     .orFail(new NotFoundError({ message: 'Не найдено' }))
     .then((card) => {
-      if (!card) {
+      if (card.owner._id.toString() !== req.user._id) {
         return next(new ForbiddenError({ message: 'Отказ сервера' }));
       }
       return Card.findByIdAndRemove(req.params.cardId).then(() => res.send({ message: 'Карточка успешно удалена' }));
