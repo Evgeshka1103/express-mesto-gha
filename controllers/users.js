@@ -6,10 +6,6 @@ const NotFoundError = require('../errors/NotFoundError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 const User = require('../models/user');
 
-const {
-  CreatedCode,
-} = require('../utils/constants');
-
 const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
