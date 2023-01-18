@@ -16,14 +16,14 @@ const getUsers = (req, res, next) => {
 
 const getUserById = (req, res, next) => {
   User.findById(req.params.userId)
-    .orFail(new NotFoundError({ message: 'Не найдено' }))
+    .orFail(new NotFoundError('Не найдено'))
 
     .then((user) => {
       res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequestError({ message: 'Некорректный запрос', ...err }));
+        return next(new BadRequestError('Некорректный запрос'));
       }
       return next(err);
     });
@@ -67,12 +67,12 @@ const createUser = (req, res, next) => {
     .catch((err) => {
       if (err.code === 11000) {
         return next(
-          new ConflictError({ message: 'Пользователь с таким email уже существует' }),
+          new ConflictError('Пользователь с таким email уже существует'),
         );
       }
 
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError({ message: 'Некорректный запрос', ...err }));
+        return next(new BadRequestError('Некорректный запрос'));
       }
       return next(err);
     });
@@ -80,7 +80,7 @@ const createUser = (req, res, next) => {
 
 const getUserInfo = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(new NotFoundError({ message: 'Не найдено' }))
+    .orFail(new NotFoundError('Не найдено'))
     .then((user) => {
       res.send(user);
     })
@@ -97,13 +97,13 @@ const updateProfile = (req, res, next) => {
       runValidators: true,
     },
   )
-    .orFail(new NotFoundError({ message: 'Не найдено' }))
+    .orFail(new NotFoundError('Не найдено'))
     .then((user) => {
       res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError({ message: 'Некорректный запрос' }));
+        return next(new BadRequestError('Некорректный запрос'));
       }
       return next(err);
     });
@@ -119,13 +119,13 @@ const updateAvatar = (req, res, next) => {
       runValidators: true,
     },
   )
-    .orFail(new NotFoundError({ message: 'Не найдено' }))
+    .orFail(new NotFoundError('Не найдено'))
     .then((user) => {
       res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError({ message: 'Некорректный запрос', ...err }));
+        return next(new BadRequestError('Некорректный запрос'));
       }
       return next(err);
     });
