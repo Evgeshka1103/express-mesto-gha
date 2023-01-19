@@ -1,17 +1,11 @@
 const express = require('express');
-
 const { celebrate, Joi } = require('celebrate');
-
 const { createUser, login } = require('../controllers/users');
-
 const validateURL = require('../middlewares/validation');
-
 const auth = require('../middlewares/auth');
-
 const NotFoundError = require('../errors/NotFoundError');
 
 const usersRoutes = require('./users');
-
 const cardsRoutes = require('./cards');
 
 const routes = express.Router();
@@ -33,12 +27,13 @@ routes.post('/signin', celebrate({
   }),
 }), login);
 
-routes.use('/users', auth, usersRoutes);
+routes.use(auth);
 
-routes.use('/cards', auth, cardsRoutes);
+routes.use('/users', usersRoutes);
+routes.use('/cards', cardsRoutes);
 
-routes.use(auth, () => {
-  throw new NotFoundError();
+routes.use((req, res, next) => {
+  next(new NotFoundError('Не найдено'));
 });
 
 module.exports = routes;

@@ -13,12 +13,13 @@ const {
 const usersRoutes = express.Router();
 
 usersRoutes.get('/', getUsers);
+usersRoutes.get('/me', getUserInfo);
 usersRoutes.get('/:userId', celebrate({
   params: Joi.object().keys({
     userId: Joi.string().length(24).hex(),
   }),
 }), getUserById);
-usersRoutes.get('/me', getUserInfo);
+
 usersRoutes.patch('/me', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),

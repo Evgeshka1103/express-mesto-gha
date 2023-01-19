@@ -1,7 +1,5 @@
 const express = require('express');
-
 const { celebrate, Joi } = require('celebrate');
-
 const validateURL = require('../middlewares/validation');
 
 const {

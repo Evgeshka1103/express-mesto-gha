@@ -42,7 +42,7 @@ const deleteCard = (req, res, next) => {
         throw new ForbiddenError('Отказ сервера');
       } else {
         return card.delete()
-          .then(() => res.send({ data: card }))
+          .then(() => res.send(card))
           .catch(next);
       }
     })
