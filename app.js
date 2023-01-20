@@ -20,13 +20,12 @@ const limiter = rateLimit({
   max: 100, // можно совершить максимум 100 запросов с одного IP
 });
 
-app.use(limiter);
-
 mongoose.set('strictQuery', true);
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(limiter);
 app.use(helmet());
 app.use(requestLogger);
 app.use(routes);
