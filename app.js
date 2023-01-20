@@ -5,9 +5,9 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
+const { InternalServerError } = require('./utils/constants');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const routes = require('./routes');
-const { internalServerError } = require('./utils/internalServerError');
 
 const app = express();
 
@@ -32,7 +32,16 @@ app.use(routes);
 app.use(errorLogger);
 app.use(errors());
 
-app.use(internalServerError);
+app.use((err, req, res, next) => {
+  const { statusCode = InternalServerError, message } = err;
+  res.status(statusCode).send({
+    message:
+      statusCode === InternalServerError
+        ? 'Внутренняя ошибка сервера'
+        : message,
+  });
+  next();
+});
 
 app.listen(PORT, () => {
   console.log(`App listen ${PORT}`);
